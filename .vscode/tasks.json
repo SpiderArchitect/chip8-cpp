@@ -9,7 +9,7 @@
         "-g",
         "${workspaceFolder}/*.cpp",
         "-o",
-        "${fileDirname}\\${fileBasenameNoExtension}.exe",
+        "${fileDirname}\\game.exe",
         "-O2",
         "-I",
         "C:/raylib/raylib/src",
@@ -22,10 +22,19 @@
       ],
       "group": {
         "kind": "build",
-        "isDefault": true
+        "isDefault": false
       },
-      "problemMatcher": ["$gcc"],
-      "detail": "Generated task by Debugger"
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Build & Run",
+      "type": "process",
+      "command": "${fileDirname}\\game.exe",
+      "dependsOn": "build raylib game",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
     }
   ]
 }
