@@ -1,6 +1,24 @@
 #include <cstdint>
+#include <random>
+
 #pragma once
+
+struct Instruction {
+    uint16_t opcode;
+    uint16_t type; // 1st nibble, categorize opcodes, is 16 bits for easier comparisions
+    uint8_t x; // 2nd nibble gives register1 address if applicable
+    uint8_t y; // 3rd nibble gives register2 address if applicable
+    uint8_t n; // 4th nibble
+    uint8_t nn; // last 8 bits
+    uint16_t nnn; // last 12 bits
+};
 class Chip8 {
+public:
+    Chip8();
+    void LoadROM(char const* filename);
+
+    // Fetch decode execute a single instruction from memory
+    void Tick();
 private:
     // memory address is from 0x000 to 0xFFF
     // address 0x000 to 0x1FF is for original interpreter code and is not used by programs
@@ -35,11 +53,27 @@ private:
     uint8_t ST;
 
     // A 64 height, 32 width monochorme display which wraps
-    uint32_t display[64 * 32];
+    uint8_t display[64 * 32];
 
     // 0,1 ... F are keys available for chip 8, 0 means not pressed, 1 means pressed
     uint16_t keypad;
-public:
-    Chip8();
-    void LoadROM(char const* filename);
+
+    // fetches 16 bit instruction from memory
+    uint16_t Fetch();
+
+    // decode it into nibbles
+    Instruction Decode(uint16_t opcode);
+
+    // execute instruction
+    void Execute(Instruction instr);
+
+    // for random var
+    std::default_random_engine randGen;
+    std::uniform_int_distribution<int> randByte;
+
+    // error
+    void Error(char* msg) {
+        std::cerr<<"[CHIP8 ERROR] "<<msg<<", PC at "<<PC-0x200<<std::endl;
+        throw std::runtime_error(msg);
+    }
 };
