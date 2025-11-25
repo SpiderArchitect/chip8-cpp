@@ -16,6 +16,8 @@ class Chip8 {
 public:
     Chip8();
     void LoadROM(char const* filename);
+    void PressKey(uint8_t key);
+    void ReleaseKey(uint8_t key);
 
     // Fetch decode execute a single instruction from memory
     void Tick();

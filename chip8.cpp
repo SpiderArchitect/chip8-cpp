@@ -42,6 +42,18 @@ void Chip8::LoadROM(const char * filename) {
     file.read((char*)&memory[0x200], size);
 }
 
+void Chip8::PressKey(uint8_t key)
+{
+    if(key > 0xF) return;
+    keypad |= (1 << key);
+}
+
+void Chip8::ReleaseKey(uint8_t key)
+{
+    if(key > 0xF) return;
+    keypad &= (~(1 << key));
+}
+
 void Chip8::Tick()
 {
     // implement fetch decode execute cycle
