@@ -29,7 +29,7 @@ Chip8::Chip8() : I(0), SP(0), DT(0), ST(0), PC(0x200), keypad(0), randGen{time(0
 {
     memcpy(&memory[fontStart], font, sizeof(font));
     memset(V, 0, sizeof(V));
-    memset(display, 0, sizeof(display));
+    memset(video, 0, sizeof(video));
     memset(stack, 0, sizeof(stack));
 }
 
@@ -91,7 +91,7 @@ void Chip8::Execute(Instruction instr)
         {
             switch(instr.nnn)
             {
-                case 0x0E0: memset(display, 0, sizeof(display)); break;
+                case 0x0E0: memset(video, 0, sizeof(video)); break;
                 case 0x0EE:
                 {
                     if(SP == 0) Error("Stack Underflow");
@@ -188,11 +188,11 @@ void Chip8::Execute(Instruction instr)
             break;
         case 0xD000:
         {
-            // xors n*8 sprite to display
+            // xors n*8 sprite to video
             uint8_t startCol = V[instr.x];
             uint8_t startRow = V[instr.y];
             uint8_t spriteHeight = instr.n;
-            V[0xF] = 0; // V[F] is collision flag (1 xor 1 is done on display), reset it
+            V[0xF] = 0; // V[F] is collision flag (1 xor 1 is done on video), reset it
 
             for(uint8_t row = 0; row < spriteHeight; ++row)
             {
@@ -203,8 +203,8 @@ void Chip8::Execute(Instruction instr)
                     uint8_t putRow = (startRow + row) & 31; // wrap index
                     uint8_t putCol = (startCol + col) & 63;
                     uint16_t idx = putRow * 64 + putCol;
-                    V[0xF] |= display[idx] & pixel;
-                    display[idx] ^= pixel;
+                    V[0xF] |= video[idx] & pixel;
+                    video[idx] ^= pixel;
                 }
             }
             break;
@@ -254,7 +254,7 @@ void Chip8::Execute(Instruction instr)
                 }
                 case 0x33:
                 {
-                    // separates 3 decimal digits of decimal representation of V[x] in memory for display
+                    // separates 3 decimal digits of decimal representation of V[x] in memory for video
                     if(I+1 > 0xFFF) Error("Memory Access Violation");
                     memory[I] = V[instr.x] / 100;
                     memory[I+1] = (V[instr.x] / 10) % 10;

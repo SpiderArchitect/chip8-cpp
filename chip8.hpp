@@ -18,6 +18,7 @@ public:
     void LoadROM(char const* filename);
     void PressKey(uint8_t key);
     void ReleaseKey(uint8_t key);
+    const uint8_t* getVideo() {return video;};
 
     // Fetch decode execute a single instruction from memory
     void Tick();
@@ -54,8 +55,8 @@ private:
     // sound timer, buzzes if value greater than 0
     uint8_t ST;
 
-    // A 64 height, 32 width monochorme display which wraps
-    uint8_t display[64 * 32];
+    // A 64 height, 32 width monochorme video which wraps
+    uint8_t video[64 * 32];
 
     // 0,1 ... F are keys available for chip 8, 0 means not pressed, 1 means pressed
     uint16_t keypad;
