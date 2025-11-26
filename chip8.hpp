@@ -1,7 +1,11 @@
-#include <cstdint>
-#include <random>
-
 #pragma once
+
+#include <cstdint>
+#include <iostream>
+#include <random>
+#include <string>
+#include <stdexcept>
+
 
 struct Instruction {
     uint16_t opcode;
@@ -18,6 +22,7 @@ public:
     void LoadROM(char const* filename);
     void PressKey(uint8_t key);
     void ReleaseKey(uint8_t key);
+    void DecrementTimers();
     const uint8_t* getVideo() {return video;};
 
     // Fetch decode execute a single instruction from memory
@@ -75,7 +80,7 @@ private:
     std::uniform_int_distribution<int> randByte;
 
     // error
-    void Error(char* msg) {
+    void Error(std::string msg) {
         std::cerr<<"[CHIP8 ERROR] "<<msg<<", PC at "<<PC-0x200<<std::endl;
         throw std::runtime_error(msg);
     }

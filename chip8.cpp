@@ -54,6 +54,12 @@ void Chip8::ReleaseKey(uint8_t key)
     keypad &= (~(1 << key));
 }
 
+void Chip8::DecrementTimers()
+{
+    if(DT > 0) --DT;
+    if(ST > 0) --ST;
+}
+
 void Chip8::Tick()
 {
     // implement fetch decode execute cycle
