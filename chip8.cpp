@@ -261,7 +261,7 @@ void Chip8::Execute(Instruction instr)
                 case 0x33:
                 {
                     // separates 3 decimal digits of decimal representation of V[x] in memory for video
-                    if(I+1 > 0xFFF) Error("Memory Access Violation");
+                    if(I+2 > 0xFFF) Error("Memory Access Violation");
                     memory[I] = V[instr.x] / 100;
                     memory[I+1] = (V[instr.x] / 10) % 10;
                     memory[I+2] = V[instr.x] % 10;

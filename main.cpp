@@ -18,6 +18,7 @@ int main(int argc, char** argv) {
     {
         std::cerr << "CRITICAL ERROR: Failed to load ROM." << std::endl;
         std::cerr << "Reason: " << e.what() << std::endl;
+        return 1;
     }
     GridDisplay display(32, 64, 10, "Chip8 Emulation");
     while(!WindowShouldClose())
